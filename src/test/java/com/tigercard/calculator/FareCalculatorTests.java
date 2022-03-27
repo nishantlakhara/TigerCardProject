@@ -1,17 +1,29 @@
 package com.tigercard.calculator;
 
-import com.tigercard.constants.CappingConstants;
+import com.tigercard.cache.CappingCache;
+import com.tigercard.converter.JourneyConverter;
 import com.tigercard.dao.impl.InMemoryDailyCappingDaoImpl;
 import com.tigercard.dao.impl.InMemoryDailyJourneyDao;
 import com.tigercard.dao.impl.InMemoryWeeklyCappingDaoImpl;
 import com.tigercard.dao.impl.InMemoryWeeklyJourneyDao;
 import com.tigercard.enums.CappingType;
+import com.tigercard.loader.impl.FileFareCappingLoaderImpl;
 import com.tigercard.models.Journey;
-import com.tigercard.utils.JourneyUtils;
+import com.tigercard.service.CappingService;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class FareCalculatorTests {
+
+    CappingService cappingService;
+    JourneyConverter converter = new JourneyConverter();
+    
+    public FareCalculatorTests() {
+        cappingService = new CappingService(
+                new CappingCache(new FileFareCappingLoaderImpl("testFareCapping.csv")));
+        
+        
+    }
 
     @Test
     public void testCalculateWeekly() {
@@ -19,14 +31,14 @@ public class FareCalculatorTests {
                 new InMemoryWeeklyJourneyDao(),
                 new DailyFareCalculator(new InMemoryDailyJourneyDao(),
                         new InMemoryDailyCappingDaoImpl(),
-                        CappingConstants.getInstance().getCapping(CappingType.DAILY)
+                        cappingService.getCapping(CappingType.DAILY)
                 ),
                 new InMemoryWeeklyCappingDaoImpl(),
-                CappingConstants.getInstance().getCapping(CappingType.WEEKLY)
+                cappingService.getCapping(CappingType.WEEKLY)
         );
 
         //120 daily cap
-        Journey journey = JourneyUtils.convertToJourney("1,2022-02-21 10:20,2,1");
+        Journey journey = converter.convertToJourney("1,2022-02-21 10:20,2,1");
         int out = weeklyFareCalculator.calculate(journey, 100);
         Assert.assertEquals(100, out);
 
@@ -37,7 +49,7 @@ public class FareCalculatorTests {
         Assert.assertEquals(0, out);
 
         //120 daily cap
-        journey = JourneyUtils.convertToJourney("1,2022-02-22 10:20,2,1");
+        journey = converter.convertToJourney("1,2022-02-22 10:20,2,1");
 
         out = weeklyFareCalculator.calculate(journey, 130);
         Assert.assertEquals(120, out);
@@ -46,7 +58,7 @@ public class FareCalculatorTests {
         Assert.assertEquals(0, out);
 
         //120 daily cap
-        journey = JourneyUtils.convertToJourney("1,2022-02-23 10:20,2,1");
+        journey = converter.convertToJourney("1,2022-02-23 10:20,2,1");
 
         out = weeklyFareCalculator.calculate(journey, 130);
         Assert.assertEquals(120, out);
@@ -55,7 +67,7 @@ public class FareCalculatorTests {
         Assert.assertEquals(0, out);
 
         //120 daily cap
-        journey = JourneyUtils.convertToJourney("1,2022-02-25 10:20,2,1");
+        journey = converter.convertToJourney("1,2022-02-25 10:20,2,1");
 
         out = weeklyFareCalculator.calculate(journey, 70);
         Assert.assertEquals(70, out);
@@ -64,13 +76,13 @@ public class FareCalculatorTests {
         Assert.assertEquals(50, out);
 
         //70 daily
-        journey = JourneyUtils.convertToJourney("1,2022-02-26 10:20,2,1");
+        journey = converter.convertToJourney("1,2022-02-26 10:20,2,1");
 
         out = weeklyFareCalculator.calculate(journey, 70);
         Assert.assertEquals(70, out);
 
         //weekly breached
-        journey = JourneyUtils.convertToJourney("1,2022-02-26 10:20,2,1");
+        journey = converter.convertToJourney("1,2022-02-26 10:20,2,1");
 
         out = weeklyFareCalculator.calculate(journey, 70);
         Assert.assertEquals(50, out);
@@ -82,7 +94,7 @@ public class FareCalculatorTests {
         Assert.assertEquals(0, out);
 
         //weekly breached
-        journey = JourneyUtils.convertToJourney("1,2022-02-28 10:20,2,1");
+        journey = converter.convertToJourney("1,2022-02-28 10:20,2,1");
 
         //New week started
         out = weeklyFareCalculator.calculate(journey, 70);
@@ -96,9 +108,9 @@ public class FareCalculatorTests {
     public void testCalculateDaily() {
         FareCalculator dailyFareCalculator = new DailyFareCalculator(new InMemoryDailyJourneyDao(),
                 new InMemoryDailyCappingDaoImpl(),
-                CappingConstants.getInstance().getCapping(CappingType.DAILY));
+                cappingService.getCapping(CappingType.DAILY));
 
-        Journey journey = JourneyUtils.convertToJourney("1,2022-02-21 10:20,2,1");
+        Journey journey = converter.convertToJourney("1,2022-02-21 10:20,2,1");
         int out = dailyFareCalculator.calculate(journey, 0);
         Assert.assertEquals(0, out);
 

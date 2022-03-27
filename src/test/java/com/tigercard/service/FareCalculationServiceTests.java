@@ -1,12 +1,13 @@
 package com.tigercard.service;
 
+import com.tigercard.cache.RateCache;
 import com.tigercard.calculator.FareCalculator;
-import com.tigercard.dao.impl.InMemoryRateDao;
+import com.tigercard.converter.JourneyConverter;
 import com.tigercard.enums.CappingType;
 import com.tigercard.factory.FactoryType;
 import com.tigercard.factory.FareCalculatorProducer;
+import com.tigercard.loader.impl.RateLoaderImpl;
 import com.tigercard.models.Journey;
-import com.tigercard.utils.JourneyUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -17,11 +18,20 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class FareCalculationServiceTests {
+    RateService rateService;
+    JourneyConverter converter = new JourneyConverter();
+
+    public FareCalculationServiceTests() {
+        rateService = new RateService(
+                new RateCache(new RateLoaderImpl("testZonePeakHours.csv",
+                        "testZoneOffPeakHours.csv",
+                        "testPeakRanges.csv",
+                        "testPeakRangesWeekend.csv")));
+    }
 
     @Test
     public void testDailyCapping() throws URISyntaxException {
@@ -31,7 +41,7 @@ public class FareCalculationServiceTests {
                 .getFareCalculator(CappingType.WEEKLY);
 
         FareCalculationService fareCalculationService = new FareCalculationService(fareCalculator,
-                new InMemoryRateDao());
+                rateService);
 
         int totalFare = fareCalculationService.calculateTotalFare(journeys);
         System.out.println("Total fare calculated = " + totalFare);
@@ -46,7 +56,7 @@ public class FareCalculationServiceTests {
                 .getFareCalculator(CappingType.WEEKLY);
 
         FareCalculationService fareCalculationService = new FareCalculationService(fareCalculator,
-                new InMemoryRateDao());
+                rateService);
 
 
         int totalFare = fareCalculationService.calculateTotalFare(journeys);
@@ -59,7 +69,7 @@ public class FareCalculationServiceTests {
         try (Stream<String> stream = Files.lines(path)) {
             return stream
                     .skip(1)
-                    .map(line -> JourneyUtils.convertToJourney(line))
+                    .map(line -> converter.convertToJourney(line))
                     .collect(Collectors.toList());
         } catch (IOException e) {
             e.printStackTrace();

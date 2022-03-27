@@ -1,8 +1,6 @@
 package com.tigercard.service;
 
 import com.tigercard.calculator.FareCalculator;
-import com.tigercard.dao.RateDao;
-import com.tigercard.domain.Rate;
 import com.tigercard.models.Journey;
 import com.tigercard.models.Zone;
 
@@ -11,12 +9,12 @@ import java.util.List;
 
 public class FareCalculationService {
     FareCalculator fareCalculator;
-    RateDao<Rate> rateDao;
+    RateService rateService;
 
     public FareCalculationService(FareCalculator fareCalculator,
-                                  RateDao<Rate> rateDao) {
+                                  RateService rateService) {
         this.fareCalculator = fareCalculator;
-        this.rateDao = rateDao;
+        this.rateService = rateService;
     }
 
     public int calculateTotalFare(List<Journey> journeys) {
@@ -25,7 +23,7 @@ public class FareCalculationService {
         while (itr.hasNext()) {
             Journey journey = itr.next();
             System.out.println(journey);
-            int fare = rateDao.getFare(journey.getLocalDateTime(), new Zone(journey.getFrom(), journey.getTo())).getRate();
+            int fare = rateService.getFare(journey.getLocalDateTime(), new Zone(journey.getFrom(), journey.getTo())).getRate();
             System.out.println("One time fare = " + fare);
             int fare1 = fareCalculator.calculate(journey, fare);
             System.out.println("Fare charged = " + fare1);

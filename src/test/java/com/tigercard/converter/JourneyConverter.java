@@ -1,14 +1,14 @@
-package com.tigercard.utils;
+package com.tigercard.converter;
 
 import com.tigercard.models.Journey;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class JourneyUtils {
+public class JourneyConverter {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-    public static Journey convertToJourney(String line) {
+    public Journey convertToJourney(String line) {
         String[] split = line.split(",");
         return new Journey(
                 Integer.parseInt(split[0]),

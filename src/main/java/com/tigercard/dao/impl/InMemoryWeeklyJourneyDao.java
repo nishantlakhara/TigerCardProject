@@ -1,12 +1,9 @@
 package com.tigercard.dao.impl;
 
-import com.tigercard.constants.CappingConstants;
 import com.tigercard.dao.JourneyDao;
 import com.tigercard.domain.Fare;
-import com.tigercard.enums.CappingType;
 import com.tigercard.models.DayRange;
-import com.tigercard.models.Zone;
-import com.tigercard.utils.DateUtils;
+import com.tigercard.transformer.DayRangeTransformer;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -14,11 +11,17 @@ import java.util.Map;
 import java.util.Optional;
 
 public class InMemoryWeeklyJourneyDao implements JourneyDao<Fare> {
-    Map<Integer, Map<DayRange, Fare>> fareMapWeekly = new HashMap<>();
+    Map<Integer, Map<DayRange, Fare>> fareMapWeekly;
+    DayRangeTransformer dayRangeTransformer;
+
+    public InMemoryWeeklyJourneyDao() {
+        this.fareMapWeekly = new HashMap<>();
+        dayRangeTransformer = new DayRangeTransformer();
+    }
 
     @Override
     public Optional<Fare> get(int id, LocalDate localDate) {
-        DayRange dayRange = DateUtils.generateDayRange(localDate);
+        DayRange dayRange = dayRangeTransformer.generateDayRange(localDate);
 
         return Optional.ofNullable(fareMapWeekly.getOrDefault(id, new HashMap<>())
                 .getOrDefault(dayRange, null));
@@ -29,7 +32,7 @@ public class InMemoryWeeklyJourneyDao implements JourneyDao<Fare> {
         fareMapWeekly.putIfAbsent(fare.getCommuterId(), new HashMap<>());
         fareMapWeekly
                 .get(fare.getCommuterId())
-                .put(DateUtils.generateDayRange(fare.getLocalDate()), fare);
+                .put(dayRangeTransformer.generateDayRange(fare.getLocalDate()), fare);
     }
 //
 //    @Override

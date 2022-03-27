@@ -1,16 +1,13 @@
-package com.tigercard.utils;
+package com.tigercard.transformer;
 
 import com.tigercard.models.DayRange;
-import com.tigercard.models.TimeRange;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.temporal.TemporalAdjusters;
 
-public class DateUtils {
-    public static DayRange generateDayRange(LocalDate dt) {
+public class DayRangeTransformer {
+    public DayRange generateDayRange(LocalDate dt) {
         LocalDate weekStart;
         LocalDate weekEnd;
         DayOfWeek dayOfWeek = dt.getDayOfWeek();
@@ -26,14 +23,5 @@ public class DateUtils {
         }
         DayRange dayRange = new DayRange(weekStart, weekEnd);
         return dayRange;
-    }
-
-    public static boolean isBetweenInclusive(LocalDateTime localDateTime, TimeRange range) {
-        LocalTime localTime = localDateTime.toLocalTime();
-        if(localTime.isAfter(range.getStartTime().minusSeconds(1))
-                && localTime.isBefore(range.getEndTime().plusSeconds(1))) {
-            return true;
-        }
-        return false;
     }
 }

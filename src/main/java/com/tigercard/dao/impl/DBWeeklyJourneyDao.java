@@ -2,7 +2,6 @@ package com.tigercard.dao.impl;
 
 import com.tigercard.dao.JourneyDao;
 import com.tigercard.domain.Fare;
-import com.tigercard.models.Zone;
 
 import java.time.LocalDate;
 import java.util.Optional;
