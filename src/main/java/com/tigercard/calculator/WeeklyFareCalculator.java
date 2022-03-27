@@ -1,12 +1,18 @@
 package com.tigercard.calculator;
 
-import com.tigercard.dao.JourneyDao1;
+import com.tigercard.dao.JourneyDao;
+import com.tigercard.dao.WeeklyCappingDao;
+import com.tigercard.domain.Capping;
 import com.tigercard.enums.CappingType;
+import com.tigercard.models.Zone;
+
+import java.util.Map;
 
 public class WeeklyFareCalculator extends AbstractFareCalculator {
-    public WeeklyFareCalculator(JourneyDao1 journeyDao,
-                                DailyFareCalculator fareCalculatorNextLevel) {
-        super(journeyDao, fareCalculatorNextLevel);
+    public WeeklyFareCalculator(JourneyDao journeyDao,
+                                DailyFareCalculator fareCalculatorNextLevel,
+                                WeeklyCappingDao<Capping> weeklyCappingDao, Map<Zone, Integer> fareCapping) {
+        super(journeyDao, fareCalculatorNextLevel, weeklyCappingDao, fareCapping);
     }
 
     @Override

@@ -17,23 +17,12 @@ public class Fare {
         return commuterId;
     }
 
-    public void setCommuterId(int commuterId) {
-        this.commuterId = commuterId;
-    }
-
     public LocalDate getLocalDate() {
         return localDate;
-    }
-
-    public void setLocalDate(LocalDate localDate) {
-        this.localDate = localDate;
     }
 
     public int getFare() {
         return fare;
     }
 
-    public void setFare(int fare) {
-        this.fare = fare;
-    }
 }

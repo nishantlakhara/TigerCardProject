@@ -15,6 +15,8 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -23,7 +25,7 @@ public class FareCalculationServiceTests {
 
     @Test
     public void testDailyCapping() throws URISyntaxException {
-        TreeSet<Journey> journeys = readJourneys("test1.csv");
+        List<Journey> journeys = readJourneys("test1.csv");
 
         FareCalculator fareCalculator = FareCalculatorProducer.getFareCalculatorFactory(FactoryType.IN_MEMORY)
                 .getFareCalculator(CappingType.WEEKLY);
@@ -38,7 +40,7 @@ public class FareCalculationServiceTests {
 
     @Test
     public void testWeeklyCapping() throws URISyntaxException {
-        TreeSet<Journey> journeys = readJourneys("test2.csv");
+        List<Journey> journeys = readJourneys("test2.csv");
 
         FareCalculator fareCalculator = FareCalculatorProducer.getFareCalculatorFactory(FactoryType.IN_MEMORY)
                 .getFareCalculator(CappingType.WEEKLY);
@@ -52,16 +54,16 @@ public class FareCalculationServiceTests {
         Assert.assertEquals(720, totalFare);
     }
 
-    private TreeSet<Journey> readJourneys(String fileName) throws URISyntaxException {
+    private List<Journey> readJourneys(String fileName) throws URISyntaxException {
         Path path = Paths.get(ClassLoader.getSystemResource(fileName).toURI());
         try (Stream<String> stream = Files.lines(path)) {
             return stream
                     .skip(1)
                     .map(line -> JourneyUtils.convertToJourney(line))
-                    .collect(Collectors.toCollection(TreeSet::new));
+                    .collect(Collectors.toList());
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return new TreeSet<>();
+        return new ArrayList<>();
     }
 }

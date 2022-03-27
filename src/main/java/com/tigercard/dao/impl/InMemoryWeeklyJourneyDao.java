@@ -1,66 +1,55 @@
 package com.tigercard.dao.impl;
 
+import com.tigercard.constants.CappingConstants;
 import com.tigercard.dao.JourneyDao;
+import com.tigercard.domain.Fare;
+import com.tigercard.enums.CappingType;
 import com.tigercard.models.DayRange;
-import com.tigercard.models.Journey;
 import com.tigercard.models.Zone;
 import com.tigercard.utils.DateUtils;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
-public class InMemoryWeeklyJourneyDao implements JourneyDao {
-    Map<Integer, Map<DayRange, Integer>> fareMapWeekly = new HashMap<>();
-    Map<Integer, Map<DayRange, Integer>> cappingMapWeekly = new HashMap<>();
+public class InMemoryWeeklyJourneyDao implements JourneyDao<Fare> {
+    Map<Integer, Map<DayRange, Fare>> fareMapWeekly = new HashMap<>();
 
-    private static final Map<Zone, Integer> WEEKLY_FARE_CAPPING = new HashMap<>();
+    @Override
+    public Optional<Fare> get(int id, LocalDate localDate) {
+        DayRange dayRange = DateUtils.generateDayRange(localDate);
 
-    /**
-     * Note : This information may be made dynamic by fetching it from database.
-     */
-    static {
-        WEEKLY_FARE_CAPPING.put(new Zone(1, 1), 500);
-        WEEKLY_FARE_CAPPING.put(new Zone(1, 2), 600);
-        WEEKLY_FARE_CAPPING.put(new Zone(2, 1), 600);
-        WEEKLY_FARE_CAPPING.put(new Zone(2, 2), 400);
+        return Optional.ofNullable(fareMapWeekly.getOrDefault(id, new HashMap<>())
+                .getOrDefault(dayRange, null));
     }
 
     @Override
-    public void updateFare(Journey journey, int fare) {
-        fareMapWeekly.putIfAbsent(journey.getCommuterId(), new HashMap<>());
+    public void save(Fare fare) {
+        fareMapWeekly.putIfAbsent(fare.getCommuterId(), new HashMap<>());
         fareMapWeekly
-                .get(journey.getCommuterId())
-                .put(DateUtils.generateDayRange(journey.getLocalDateTime().toLocalDate()), fare);
+                .get(fare.getCommuterId())
+                .put(DateUtils.generateDayRange(fare.getLocalDate()), fare);
     }
-
-    @Override
-    public int getFare(Journey journey) {
-        //return 0;
-        DayRange dayRange = DateUtils.generateDayRange(journey.getLocalDateTime().toLocalDate());
-
-        return fareMapWeekly.getOrDefault(journey.getCommuterId(), new HashMap<>())
-                .getOrDefault(dayRange, 0);
-    }
-
-    @Override
-    public void updateCapping(Journey journey) {
-        cappingMapWeekly.putIfAbsent(journey.getCommuterId(), new HashMap<>());
-        Zone zone = new Zone(journey.getFrom(), journey.getTo());
-
-        DayRange dayRange = DateUtils.generateDayRange(journey.getLocalDateTime().toLocalDate());
-        int maxCap = Math.max(WEEKLY_FARE_CAPPING.get(zone),
-                cappingMapWeekly.get(journey.getCommuterId())
-                        .getOrDefault(dayRange, 0));
-        cappingMapWeekly
-                .get(journey.getCommuterId())
-                .put(dayRange, maxCap);
-    }
-
-    @Override
-    public int getCapping(Journey journey) {
-        DayRange dayRange = DateUtils.generateDayRange(journey.getLocalDateTime().toLocalDate());
-
-        return cappingMapWeekly.get(journey.getCommuterId())
-                .get(dayRange);
-    }
+//
+//    @Override
+//    public void saveCapping(int id, Zone zone, LocalDate localDate) {
+//        cappingMapWeekly.putIfAbsent(id, new HashMap<>());
+//
+//        DayRange dayRange = DateUtils.generateDayRange(localDate);
+//        int maxCap = Math.max(weeklyCapping.get(zone),
+//                cappingMapWeekly.get(id)
+//                        .getOrDefault(dayRange, 0));
+//        cappingMapWeekly
+//                .get(id)
+//                .put(dayRange, maxCap);
+//    }
+//
+//    @Override
+//    public int getCapping(int id, LocalDate localDate) {
+//        DayRange dayRange = DateUtils.generateDayRange(localDate);
+//
+//        return cappingMapWeekly.get(id)
+//                .get(dayRange);
+//    }
 }

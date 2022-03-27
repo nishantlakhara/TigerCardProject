@@ -1,14 +1,15 @@
 package com.tigercard.dao;
 
-import com.tigercard.models.Journey;
+import com.tigercard.models.Zone;
 
-public interface JourneyDao {
+import java.time.LocalDate;
+import java.util.Optional;
 
-    void updateFare(Journey journey, int fare);
+public interface JourneyDao<T> {
 
-    int getFare(Journey journey);
+    Optional<T> get(int id, LocalDate localDate);
 
-    void updateCapping(Journey journey);
+    void save(T t);
 
-    int getCapping(Journey journey);
+//    void update(T t, String[] params);
 }
