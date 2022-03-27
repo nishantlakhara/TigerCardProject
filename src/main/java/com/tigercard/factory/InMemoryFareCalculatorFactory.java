@@ -3,9 +3,7 @@ package com.tigercard.factory;
 import com.tigercard.calculator.DailyFareCalculator;
 import com.tigercard.calculator.FareCalculator;
 import com.tigercard.calculator.WeeklyFareCalculator;
-import com.tigercard.dao.impl.InMemoryDailyJourneyDao;
 import com.tigercard.dao.impl.InMemoryDailyJourneyDao1;
-import com.tigercard.dao.impl.InMemoryWeeklyJourneyDao;
 import com.tigercard.dao.impl.InMemoryWeeklyJourneyDao1;
 import com.tigercard.enums.CappingType;
 

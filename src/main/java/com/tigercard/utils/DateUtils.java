@@ -1,7 +1,6 @@
 package com.tigercard.utils;
 
 import com.tigercard.models.DayRange;
-import com.tigercard.models.Journey;
 import com.tigercard.models.TimeRange;
 
 import java.time.DayOfWeek;

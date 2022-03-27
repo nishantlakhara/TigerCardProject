@@ -1,8 +1,6 @@
 package com.tigercard.calculator;
 
-import com.tigercard.dao.impl.InMemoryDailyJourneyDao;
 import com.tigercard.dao.impl.InMemoryDailyJourneyDao1;
-import com.tigercard.dao.impl.InMemoryWeeklyJourneyDao;
 import com.tigercard.dao.impl.InMemoryWeeklyJourneyDao1;
 import com.tigercard.models.Journey;
 import com.tigercard.utils.JourneyUtils;
