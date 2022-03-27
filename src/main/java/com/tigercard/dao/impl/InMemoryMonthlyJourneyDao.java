@@ -1,5 +1,6 @@
-package com.tigercard.dao;
+package com.tigercard.dao.impl;
 
+import com.tigercard.dao.JourneyDao;
 import com.tigercard.models.Journey;
 
 public class InMemoryMonthlyJourneyDao implements JourneyDao {

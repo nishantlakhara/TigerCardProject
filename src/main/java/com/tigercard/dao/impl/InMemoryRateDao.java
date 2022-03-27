@@ -1,6 +1,6 @@
-package com.tigercard.dao;
+package com.tigercard.dao.impl;
 
-import com.tigercard.models.Journey;
+import com.tigercard.dao.RateDao;
 import com.tigercard.models.TimeRange;
 import com.tigercard.models.Zone;
 import com.tigercard.utils.DateUtils;
@@ -19,7 +19,7 @@ import java.util.Map;
  * ○ Saturday - Sunday
  * ■ 09:00 - 11:00, 18:00 - 22:00
  */
-public class InMemoryRateDao implements RateDao {
+public class InMemoryRateDao implements RateDao<Integer> {
     private static final Map<Zone, Integer> ZONE_TO_PEAK_HOUR_MAP = new HashMap<>();
     private static final Map<Zone, Integer> ZONE_TO_OFF_PEAK_MAP = new HashMap<>();
     private static final List<TimeRange> PEAK_RANGES = new ArrayList<>();
@@ -47,12 +47,12 @@ public class InMemoryRateDao implements RateDao {
     }
 
     @Override
-    public int getFare(Journey journey) {
-        boolean isPeak = checkForRange(journey.getLocalDateTime());
+    public Integer getFare(LocalDateTime localDateTime, Zone zone) {
+        boolean isPeak = checkForRange(localDateTime);
         if(isPeak) {
-            return ZONE_TO_PEAK_HOUR_MAP.get(new Zone(journey.getFrom(), journey.getTo()));
+            return ZONE_TO_PEAK_HOUR_MAP.get(zone);
         } else {
-            return ZONE_TO_OFF_PEAK_MAP.get(new Zone(journey.getFrom(), journey.getTo()));
+            return ZONE_TO_OFF_PEAK_MAP.get(zone);
         }
     }
 

@@ -1,7 +1,9 @@
 package com.tigercard.dao;
 
-import com.tigercard.models.Journey;
+import com.tigercard.models.Zone;
 
-public interface RateDao {
-    int getFare(Journey journey);
+import java.time.LocalDateTime;
+
+public interface RateDao<T> {
+    T getFare(LocalDateTime localDateTime, Zone zone);
 }

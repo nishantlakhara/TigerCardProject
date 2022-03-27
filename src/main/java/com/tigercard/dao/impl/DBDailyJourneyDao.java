@@ -1,8 +1,9 @@
-package com.tigercard.dao;
+package com.tigercard.dao.impl;
 
+import com.tigercard.dao.JourneyDao;
 import com.tigercard.models.Journey;
 
-public class DBWeeklyJourneyDao implements JourneyDao {
+public class DBDailyJourneyDao implements JourneyDao {
     @Override
     public void updateFare(Journey journey, int fare) {
         throw new UnsupportedOperationException("DBDailyJourneyDao not supported yet.");

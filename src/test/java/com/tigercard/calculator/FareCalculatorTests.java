@@ -1,7 +1,9 @@
 package com.tigercard.calculator;
 
-import com.tigercard.dao.InMemoryDailyJourneyDao;
-import com.tigercard.dao.InMemoryWeeklyJourneyDao;
+import com.tigercard.dao.impl.InMemoryDailyJourneyDao;
+import com.tigercard.dao.impl.InMemoryDailyJourneyDao1;
+import com.tigercard.dao.impl.InMemoryWeeklyJourneyDao;
+import com.tigercard.dao.impl.InMemoryWeeklyJourneyDao1;
 import com.tigercard.models.Journey;
 import com.tigercard.utils.JourneyUtils;
 import org.junit.Assert;
@@ -12,8 +14,8 @@ public class FareCalculatorTests {
     @Test
     public void testCalculateWeekly() {
         WeeklyFareCalculator weeklyFareCalculator = new WeeklyFareCalculator(
-                new InMemoryWeeklyJourneyDao(),
-                new DailyFareCalculator(new InMemoryDailyJourneyDao()));
+                new InMemoryWeeklyJourneyDao1(),
+                new DailyFareCalculator(new InMemoryDailyJourneyDao1()));
 
         //120 daily cap
         Journey journey = JourneyUtils.convertToJourney("1,2022-02-21 10:20,2,1");
@@ -84,7 +86,7 @@ public class FareCalculatorTests {
 
     @Test
     public void testCalculateDaily() {
-        FareCalculator dailyFareCalculator = new DailyFareCalculator(new InMemoryDailyJourneyDao());
+        FareCalculator dailyFareCalculator = new DailyFareCalculator(new InMemoryDailyJourneyDao1());
 
         Journey journey = JourneyUtils.convertToJourney("1,2022-02-21 10:20,2,1");
         int out = dailyFareCalculator.calculate(journey, 0);

@@ -3,8 +3,10 @@ package com.tigercard.factory;
 import com.tigercard.calculator.DailyFareCalculator;
 import com.tigercard.calculator.FareCalculator;
 import com.tigercard.calculator.WeeklyFareCalculator;
-import com.tigercard.dao.InMemoryDailyJourneyDao;
-import com.tigercard.dao.InMemoryWeeklyJourneyDao;
+import com.tigercard.dao.impl.InMemoryDailyJourneyDao;
+import com.tigercard.dao.impl.InMemoryDailyJourneyDao1;
+import com.tigercard.dao.impl.InMemoryWeeklyJourneyDao;
+import com.tigercard.dao.impl.InMemoryWeeklyJourneyDao1;
 import com.tigercard.enums.CappingType;
 
 public class InMemoryFareCalculatorFactory extends AbstractFareCalculatorFactory {
@@ -12,9 +14,9 @@ public class InMemoryFareCalculatorFactory extends AbstractFareCalculatorFactory
     public FareCalculator getFareCalculator(CappingType cappingType) {
         switch(cappingType) {
             case WEEKLY: return new WeeklyFareCalculator(
-                    new InMemoryWeeklyJourneyDao(),
-                    new DailyFareCalculator(new InMemoryDailyJourneyDao()));
-            case DAILY: return new DailyFareCalculator(new InMemoryDailyJourneyDao());
+                    new InMemoryWeeklyJourneyDao1(),
+                    new DailyFareCalculator(new InMemoryDailyJourneyDao1()));
+            case DAILY: return new DailyFareCalculator(new InMemoryDailyJourneyDao1());
             default: return null;
         }
     }

@@ -1,7 +1,7 @@
 package com.tigercard.service;
 
 import com.tigercard.calculator.FareCalculator;
-import com.tigercard.dao.InMemoryRateDao;
+import com.tigercard.dao.impl.InMemoryRateDao;
 import com.tigercard.enums.CappingType;
 import com.tigercard.factory.FactoryType;
 import com.tigercard.factory.FareCalculatorProducer;

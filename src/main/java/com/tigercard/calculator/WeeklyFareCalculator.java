@@ -1,10 +1,10 @@
 package com.tigercard.calculator;
 
-import com.tigercard.dao.JourneyDao;
+import com.tigercard.dao.JourneyDao1;
 import com.tigercard.enums.CappingType;
 
 public class WeeklyFareCalculator extends AbstractFareCalculator {
-    public WeeklyFareCalculator(JourneyDao journeyDao,
+    public WeeklyFareCalculator(JourneyDao1 journeyDao,
                                 DailyFareCalculator fareCalculatorNextLevel) {
         super(journeyDao, fareCalculatorNextLevel);
     }
