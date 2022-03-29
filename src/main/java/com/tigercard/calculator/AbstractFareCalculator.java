@@ -25,7 +25,7 @@ public abstract class AbstractFareCalculator implements FareCalculator {
     }
 
     @Override
-    public int calculate(Journey journey, int fare) {
+    public int calculate(Journey journey, int fare) throws Exception {
         int commuterId = journey.getCommuterId();
         LocalDate localDate = journey.getLocalDateTime().toLocalDate();
 
@@ -43,7 +43,7 @@ public abstract class AbstractFareCalculator implements FareCalculator {
         return fare;
     }
 
-    private int updateFare(int fare, int commuterId, LocalDate localDate, Integer totalFareAlreadyChargedVal) {
+    private int updateFare(int fare, int commuterId, LocalDate localDate, Integer totalFareAlreadyChargedVal) throws Exception {
         Optional<Capping> capping = cappingDao.getCapping(commuterId, localDate);
         int cappingVal = capping.get().getCapping();
         if(totalFareAlreadyChargedVal + fare >= cappingVal) {
@@ -53,7 +53,7 @@ public abstract class AbstractFareCalculator implements FareCalculator {
         return fare;
     }
 
-    private Fare calculateTotalFareAlreadyCharged(int commuterId, LocalDate localDate) {
+    private Fare calculateTotalFareAlreadyCharged(int commuterId, LocalDate localDate) throws Exception {
         Optional<Fare> totalFareAlreadyCharged = journeyDao.get(commuterId, localDate);
         if(!totalFareAlreadyCharged.isPresent()) {
             totalFareAlreadyCharged = Optional.of(new Fare(commuterId, localDate, 0));
@@ -63,7 +63,7 @@ public abstract class AbstractFareCalculator implements FareCalculator {
         return totalFareAlreadyChargedObj;
     }
 
-    private void saveCapping(Journey journey) {
+    private void saveCapping(Journey journey) throws Exception {
         Optional<Capping> capping = cappingDao.getCapping(journey.getCommuterId(), journey.getLocalDateTime().toLocalDate());
 
         Capping cappingObj;

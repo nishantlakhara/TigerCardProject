@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 public interface CappingDao<T> {
-    void saveCapping(T capping);
+    void saveCapping(T capping) throws Exception;
 
-    Optional<T> getCapping(int id, LocalDate localDate);
+    Optional<T> getCapping(int id, LocalDate localDate) throws Exception;
 }

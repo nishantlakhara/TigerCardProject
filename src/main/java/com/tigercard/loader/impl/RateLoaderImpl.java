@@ -35,7 +35,7 @@ public class RateLoaderImpl implements RateLoader {
     }
 
     @Override
-    public RateData load() {
+    public RateData load() throws Exception {
         loadPeakMap(zoneToPeakMap, zoneToPeakFile);
 
         loadPeakMap(zoneToOffPeakMap, zoneToOffPeakFile);

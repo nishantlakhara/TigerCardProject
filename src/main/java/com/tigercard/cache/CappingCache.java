@@ -13,10 +13,9 @@ public class CappingCache {
 
     public CappingCache(FareCappingLoader fareCappingLoader) {
         this.fareCappingLoader = fareCappingLoader;
-        loadCapping();
     }
 
-    public void loadCapping() {
+    public void loadCapping() throws Exception {
         fareCappingData = fareCappingLoader.load();
     }
 

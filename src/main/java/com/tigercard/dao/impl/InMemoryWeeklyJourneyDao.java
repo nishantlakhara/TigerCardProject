@@ -20,7 +20,7 @@ public class InMemoryWeeklyJourneyDao implements JourneyDao<Fare> {
     }
 
     @Override
-    public Optional<Fare> get(int id, LocalDate localDate) {
+    public Optional<Fare> get(int id, LocalDate localDate) throws Exception {
         DayRange dayRange = dayRangeTransformer.generateDayRange(localDate);
 
         return Optional.ofNullable(fareMapWeekly.getOrDefault(id, new HashMap<>())
@@ -28,7 +28,7 @@ public class InMemoryWeeklyJourneyDao implements JourneyDao<Fare> {
     }
 
     @Override
-    public void save(Fare fare) {
+    public void save(Fare fare) throws Exception {
         fareMapWeekly.putIfAbsent(fare.getCommuterId(), new HashMap<>());
         fareMapWeekly
                 .get(fare.getCommuterId())

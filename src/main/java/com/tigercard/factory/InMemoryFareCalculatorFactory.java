@@ -14,11 +14,13 @@ import com.tigercard.service.CappingService;
 
 public class InMemoryFareCalculatorFactory extends AbstractFareCalculatorFactory {
     @Override
-    public FareCalculator getFareCalculator(CappingType cappingType) {
+    public FareCalculator getFareCalculator(CappingType cappingType) throws Exception {
+        CappingCache cappingCache = new CappingCache(
+                new FileFareCappingLoaderImpl("fareCapping.csv")
+        );
+        cappingCache.loadCapping();
         CappingService cappingService = new CappingService(
-                new CappingCache(
-                        new FileFareCappingLoaderImpl("fareCapping.csv")
-                )
+                cappingCache
         );
 
         switch(cappingType) {

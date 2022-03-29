@@ -7,5 +7,5 @@ public interface FareCalculator {
     CappingType getCapping();
 //    int calculate(List<Journey> journeys);
 
-    int calculate(Journey journey, int fare);
+    int calculate(Journey journey, int fare) throws Exception;
 }

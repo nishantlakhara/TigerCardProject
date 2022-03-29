@@ -21,7 +21,7 @@ public class FileFareCappingLoaderImpl implements FareCappingLoader {
     }
 
     @Override
-    public FareCappingData load() {
+    public FareCappingData load() throws Exception {
         final Map<CappingType, Map<Zone, Integer>> fareCapping = new HashMap<>();
         Path path = null;
         try {
