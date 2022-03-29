@@ -4,5 +4,5 @@ import com.tigercard.calculator.FareCalculator;
 import com.tigercard.enums.CappingType;
 
 public abstract class AbstractFareCalculatorFactory {
-     public abstract FareCalculator getFareCalculator(CappingType cappingType);
+     public abstract FareCalculator getFareCalculator(CappingType cappingType) throws Exception;
 }

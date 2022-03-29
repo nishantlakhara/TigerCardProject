@@ -25,16 +25,18 @@ public class FareCalculationServiceTests {
     RateService rateService;
     JourneyConverter converter = new JourneyConverter();
 
-    public FareCalculationServiceTests() {
+    public FareCalculationServiceTests() throws Exception {
+        RateCache rateCache = new RateCache(new RateLoaderImpl("testZonePeakHours.csv",
+                "testZoneOffPeakHours.csv",
+                "testPeakRanges.csv",
+                "testPeakRangesWeekend.csv"));
+        rateCache.load();
         rateService = new RateService(
-                new RateCache(new RateLoaderImpl("testZonePeakHours.csv",
-                        "testZoneOffPeakHours.csv",
-                        "testPeakRanges.csv",
-                        "testPeakRangesWeekend.csv")));
+                rateCache);
     }
 
     @Test
-    public void testDailyCapping() throws URISyntaxException {
+    public void testDailyCapping() throws Exception {
         List<Journey> journeys = readJourneys("test1.csv");
 
         FareCalculator fareCalculator = FareCalculatorProducer.getFareCalculatorFactory(FactoryType.IN_MEMORY)
@@ -49,7 +51,7 @@ public class FareCalculationServiceTests {
     }
 
     @Test
-    public void testWeeklyCapping() throws URISyntaxException {
+    public void testWeeklyCapping() throws Exception {
         List<Journey> journeys = readJourneys("test2.csv");
 
         FareCalculator fareCalculator = FareCalculatorProducer.getFareCalculatorFactory(FactoryType.IN_MEMORY)

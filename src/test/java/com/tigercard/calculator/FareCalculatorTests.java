@@ -18,15 +18,17 @@ public class FareCalculatorTests {
     CappingService cappingService;
     JourneyConverter converter = new JourneyConverter();
     
-    public FareCalculatorTests() {
+    public FareCalculatorTests() throws Exception {
+        CappingCache cappingCache = new CappingCache(new FileFareCappingLoaderImpl("testFareCapping.csv"));
+        cappingCache.loadCapping();
         cappingService = new CappingService(
-                new CappingCache(new FileFareCappingLoaderImpl("testFareCapping.csv")));
+                cappingCache);
         
         
     }
 
     @Test
-    public void testCalculateWeekly() {
+    public void testCalculateWeekly() throws Exception {
         WeeklyFareCalculator weeklyFareCalculator = new WeeklyFareCalculator(
                 new InMemoryWeeklyJourneyDao(),
                 new DailyFareCalculator(new InMemoryDailyJourneyDao(),
@@ -105,7 +107,7 @@ public class FareCalculatorTests {
     }
 
     @Test
-    public void testCalculateDaily() {
+    public void testCalculateDaily() throws Exception {
         FareCalculator dailyFareCalculator = new DailyFareCalculator(new InMemoryDailyJourneyDao(),
                 new InMemoryDailyCappingDaoImpl(),
                 cappingService.getCapping(CappingType.DAILY));

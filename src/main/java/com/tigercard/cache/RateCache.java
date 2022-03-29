@@ -14,10 +14,9 @@ public class RateCache {
 
     public RateCache(RateLoader rateLoader) {
         this.rateLoader = rateLoader;
-        load();
     }
 
-    public void load() {
+    public void load() throws Exception {
         rateData = rateLoader.load();
     }
 
